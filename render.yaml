@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: hoa-chat-legal-tool
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: NODE_ENV
+        value: production
