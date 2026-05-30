@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BR XNK – AI Legal Tool | Tra Cứu Thủ Tục Hóa Chất</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #f4f6fb;
+  --bg2: #eef1f8;
+  --white: #ffffff;
+  --navy: #0f1f3d;
+  --navy2: #1e3a5f;
+  --a1: #2563eb;
+  --a2: #3b82f6;
+  --a3: rgba(37,99,235,0.08);
+  --a4: rgba(37,99,235,0.18);
+  --g1: #059669;
+  --g2: rgba(5,150,105,0.08);
+  --g3: rgba(5,150,105,0.2);
+  --gold: #d97706;
+  --red: #dc2626;
+  --purple: #7c3aed;
+  --t1: #0f1f3d;
+  --t2: #4b5e7a;
+  --t3: #8fa3be;
+  --border: rgba(15,31,61,0.08);
+  --border2: rgba(15,31,61,0.14);
+  --shadow: 0 1px 4px rgba(15,31,61,0.08);
+  --shadow2: 0 4px 16px rgba(15,31,61,0.1);
+  --r: 14px;
+  --rsm: 8px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Be Vietnam Pro',sans-serif; background:var(--bg); color:var(--t1); min-height:100vh; }
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 28px; height:60px;
+  background:var(--navy); box-shadow:0 2px 12px rgba(15,31,61,0.3);
+}
+
+.brand { display:flex; align-items:center; gap:14px; }
+.brand-logo { display:flex; align-items:center; gap:2px; font-size:20px; font-weight:900; letter-spacing:-0.5px; }
+.brand-logo .br { color:#fff; }
+.brand-logo .x { color:#60a5fa; font-size:24px; }
+.brand-logo .nk { color:#34d399; }
+.brand-info { border-left:1px solid rgba(255,255,255,0.15); padding-left:14px; margin-left:2px; }
+.brand-sub { font-size:10px; color:rgba(255,255,255,0.45); letter-spacing:0.8px; text-transform:uppercase; }
+.brand-tel { font-size:12px; color:#93c5fd; font-weight:700; margin-top:1px; }
+
+.nav-pills { display:flex; gap:3px; }
+.npill { padding:7px 16px; border-radius:20px; border:none; background:transparent; color:rgba(255,255,255,0.55); font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.18s; }
+.npill:hover { color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.08); }
+.npill.active { color:var(--navy); background:#60a5fa; font-weight:700; }
+
+.status-live { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:700; background:rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
+.sdot { width:6px;height:6px;border-radius:50%;background:#34d399;animation:pulse 2s infinite; }
+
+/* ===== LAYOUT ===== */
+.layout { display:flex; min-height:calc(100vh - 60px); }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width:200px; flex-shrink:0;
+  background:var(--white); border-right:1px solid var(--border);
+  padding:20px 10px;
+}
+.slabel { font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--t3); padding:4px 10px 8px; }
+.sbtn {
+  display:flex; align-items:center; gap:9px; width:100%;
+  padding:9px 10px; border-radius:9px; border:1px solid transparent;
+  background:transparent; color:var(--t2); font-family:inherit;
+  font-size:12px; font-weight:600; cursor:pointer; text-align:left; transition:all 0.18s; margin-bottom:2px;
+}
+.sbtn:hover { background:var(--a3); color:var(--t1); }
+.sbtn.active { background:var(--a3); color:var(--a1); border-color:var(--a4); }
+.sbtn .ic { font-size:15px; width:24px; text-align:center; flex-shrink:0; }
+.sbtn .sub { font-size:9px; color:var(--t3); display:block; margin-top:1px; font-weight:400; }
+.sbtn.active .sub { color:rgba(37,99,235,0.5); }
+
+/* ===== MAIN ===== */
+.main { flex:1; padding:24px 28px; }
+
+/* Quick examples */
+.quick-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; align-items:center; }
+.quick-label { font-size:11px; font-weight:700; color:var(--t3); }
+.qchip {
+  padding:6px 14px; border-radius:20px; border:1px solid var(--border2);
+  background:var(--white); color:var(--t2); font-size:11px; font-weight:600;
+  cursor:pointer; font-family:inherit; transition:all 0.18s;
+  box-shadow:var(--shadow);
+}
+.qchip:hover { border-color:var(--a2); color:var(--a1); background:var(--a3); box-shadow:var(--shadow2); }
+
+/* Section header */
+.sec-hd { display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; color:var(--t2); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+.sec-hd::before { content:''; display:block; width:3px; height:14px; border-radius:2px; background:linear-gradient(var(--a1),var(--purple)); flex-shrink:0; }
+
+/* ===== FORM CARD ===== */
+.form-card { background:var(--white); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; margin-bottom:16px; box-shadow:var(--shadow); }
+.form-head { padding:14px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; background:var(--navy); }
+.fh-ic { width:32px;height:32px;border-radius:8px;background:rgba(96,165,250,0.2);display:flex;align-items:center;justify-content:center;font-size:16px; }
+.fh-title { font-size:13px;font-weight:700;color:#fff; }
+.fh-sub { font-size:10px;color:rgba(255,255,255,0.45);margin-top:1px; }
+.form-body { padding:20px; }
+
+.fg3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px; }
+.fg2 { display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px; }
+.fg1 { display:grid;grid-template-columns:1fr;margin-bottom:0; }
+
+.field { display:flex;flex-direction:column;gap:5px; }
+.field label { font-size:10px;font-weight:700;color:var(--t2);display:flex;align-items:center;gap:5px; }
+.req { color:var(--red); }
+.tag-opt { font-size:9px;padding:1px 5px;border-radius:3px;background:var(--bg2);color:var(--t3); }
+.tag-auto { font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(37,99,235,0.1);color:var(--a1);font-weight:700; }
+.tag-ai { font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(5,150,105,0.1);color:var(--g1);font-weight:700; }
+
+.inp,.sel,.ta {
+  padding:10px 13px; background:var(--bg);
+  border:1.5px solid var(--border2); border-radius:var(--rsm);
+  color:var(--t1); font-family:inherit; font-size:13px; outline:none;
+  transition:all 0.18s; width:100%;
+}
+.inp:focus,.sel:focus,.ta:focus { border-color:var(--a1);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+.inp::placeholder,.ta::placeholder { color:var(--t3); }
+.inp.filled { border-color:var(--g1);background:rgba(5,150,105,0.05);color:var(--g1); }
+.ta { resize:vertical;min-height:72px;line-height:1.5;font-size:12px; }
+.sel { cursor:pointer; background:var(--bg); }
+.hint { font-size:9px;color:var(--t3);font-family:'JetBrains Mono',monospace;margin-top:2px; }
+
+.hs-ai-suggest { display:none;padding:8px 12px;background:var(--g2);border:1px solid var(--g3);border-radius:var(--rsm);font-size:11px;color:var(--g1);margin-top:5px;cursor:pointer;font-weight:600;transition:all 0.18s; }
+.hs-ai-suggest:hover { background:rgba(5,150,105,0.12); }
+.hs-ai-suggest.show { display:block; }
+
+.action-row { display:flex;gap:10px;align-items:center;padding-top:14px;border-top:1.5px solid var(--border);margin-top:6px; }
+.btn-search {
+  display:flex;align-items:center;gap:8px;padding:12px 28px;
+  background:var(--navy); color:#fff;
+  border:none;border-radius:var(--rsm);
+  font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;
+  transition:all 0.2s; box-shadow:0 4px 12px rgba(15,31,61,0.25);
+}
+.btn-search:hover:not(:disabled) { background:var(--navy2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(15,31,61,0.3); }
+.btn-search:disabled { opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none; }
+.btn-sec { padding:12px 18px;background:var(--white);color:var(--t2);border:1.5px solid var(--border2);border-radius:var(--rsm);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.18s; }
+.btn-sec:hover { border-color:var(--navy);color:var(--navy); }
+.miss { font-size:11px;color:var(--red);display:none; }
+
+/* ===== UPLOAD (ở dưới form) ===== */
+.upload-section { margin-bottom:0; }
+.upload-zone {
+  border:2px dashed var(--border2); border-radius:var(--r);
+  padding:18px 22px; cursor:pointer;
+  background:var(--white); transition:all 0.2s;
+  display:flex; align-items:center; gap:16px;
+  position:relative; box-shadow:var(--shadow);
+}
+.upload-zone:hover { border-color:var(--a2); background:var(--a3); }
+.upload-zone input { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2; }
+.uz-icon { font-size:28px; flex-shrink:0; }
+.uz-main { flex:1; }
+.uz-title { font-size:13px;font-weight:700;color:var(--t1);margin-bottom:2px; }
+.uz-sub { font-size:11px;color:var(--t3);line-height:1.5; }
+.uz-tags { display:flex;gap:5px;margin-top:6px;flex-wrap:wrap; }
+.uz-tag { font-size:9px;padding:2px 8px;border-radius:3px;background:var(--a3);color:var(--a1);border:1px solid var(--a4);font-weight:700; }
+.uz-badge { padding:8px 16px;border-radius:var(--rsm);background:var(--navy);color:#fff;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0; }
+
+.uploaded-bar { display:none; align-items:center; gap:10px; padding:12px 16px; background:var(--g2); border:1.5px solid var(--g3); border-radius:var(--r); box-shadow:var(--shadow); }
+.ub-icon { font-size:20px; }
+.ub-info { flex:1; }
+.ub-name { font-size:12px;font-weight:700;color:var(--g1); }
+.ub-size { font-size:10px;color:var(--t3); }
+.ub-rm { background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;padding:4px;margin-left:auto; }
+
+.analyzing-bar { display:none; align-items:center; gap:10px; padding:11px 16px; background:var(--a3); border:1.5px solid var(--a4); border-radius:var(--r); }
+.analyzing-bar.show { display:flex; }
+.aring { width:18px;height:18px;border:2px solid var(--a4);border-top-color:var(--a1);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0; }
+.atext { font-size:12px;color:var(--a1);font-weight:600; }
+
+/* ===== LOADING ===== */
+.loading { display:none; }
+.loading.show { display:block; }
+.load-card { background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:44px 20px;text-align:center;box-shadow:var(--shadow2); }
+.load-ring { width:52px;height:52px;border:3px solid var(--border2);border-top-color:var(--a1);border-radius:50%;animation:spin 0.9s linear infinite;margin:0 auto 16px; }
+.load-steps { display:flex;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap; }
+.lstep { font-size:10px;padding:3px 10px;border-radius:4px;background:var(--bg);color:var(--t3);transition:all 0.3s;border:1px solid var(--border); }
+.lstep.on { background:var(--a3);color:var(--a1);border-color:var(--a4);font-weight:700; }
+
+/* ===== ERROR ===== */
+.err { display:none;background:#fff5f5;border:1.5px solid rgba(220,38,38,0.2);border-radius:var(--rsm);padding:14px 18px;font-size:12px;color:var(--red);line-height:1.6;margin-bottom:16px; }
+.err.show { display:block; }
+
+/* ===== RESULT ===== */
+.result { display:none; }
+.result.show { display:block; }
+
+.result-header { margin-bottom:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px; }
+.rname { font-size:20px;font-weight:900;color:var(--navy);line-height:1.2; }
+.rchemname { font-size:11px;color:var(--t3);margin-top:3px;font-family:'JetBrains Mono',monospace; }
+.rtags { display:flex;gap:6px;margin-top:10px;flex-wrap:wrap; }
+.rtag { font-size:10px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.3px; }
+.rt-navy { background:var(--navy);color:#fff; }
+.rt-blue { background:var(--a3);color:var(--a1);border:1px solid var(--a4); }
+.rt-green { background:var(--g2);color:var(--g1);border:1px solid var(--g3); }
+.rt-gold { background:rgba(217,119,6,0.1);color:var(--gold);border:1px solid rgba(217,119,6,0.2); }
+.rt-mono { font-family:'JetBrains Mono',monospace; }
+
+/* KEY FACTS */
+.key-facts { display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px; }
+.kf { background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow); }
+.kf.kf-yes { border-color:rgba(220,38,38,0.3);background:#fff5f5; }
+.kf.kf-no { border-color:var(--g3);background:var(--g2); }
+.kf.kf-warn { border-color:rgba(217,119,6,0.3);background:rgba(217,119,6,0.06); }
+.kf-icon { font-size:24px;flex-shrink:0; }
+.kf-label { font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px; }
+.kf-val { font-size:13px;font-weight:800; }
+.kf-yes .kf-val { color:var(--red); }
+.kf-no .kf-val { color:var(--g1); }
+.kf-warn .kf-val { color:var(--gold); }
+
+/* DECLARATION BOX */
+.decl-box { background:var(--white);border:2px solid var(--navy);border-radius:var(--r);padding:16px 18px;margin-bottom:16px;box-shadow:var(--shadow2); }
+.decl-label { font-size:10px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:6px; }
+.decl-name { font-size:13px;font-weight:700;color:var(--navy);line-height:1.7;font-family:'JetBrains Mono',monospace;padding:10px 14px;background:var(--bg);border-radius:var(--rsm);border-left:4px solid var(--a1); }
+.decl-note { font-size:11px;color:var(--t3);margin-top:8px;line-height:1.6; }
+.decl-copy { display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:6px 14px;background:var(--navy);color:#fff;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.18s; }
+.decl-copy:hover { background:var(--navy2); }
+
+/* TABS */
+.tabs { display:flex;border-bottom:2px solid var(--border);margin-bottom:16px;gap:0; }
+.tab { padding:10px 20px;font-size:12px;font-weight:700;color:var(--t3);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;transition:all 0.18s;letter-spacing:0.3px; }
+.tab:hover { color:var(--t2); }
+.tab.active { color:var(--a1);border-bottom-color:var(--a1); }
+.pane { display:none; }
+.pane.active { display:block; }
+
+/* RESULT CARDS */
+.rcard { background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow); }
+.rcard-head { padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:var(--t2);background:var(--bg);letter-spacing:0.3px; }
+.rnum { width:22px;height:22px;border-radius:5px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff; }
+.rcard-body { padding:18px;font-size:13px;line-height:1.75;color:var(--t2); }
+.rcard-body p { margin-bottom:7px; }
+.rcard-body h3 { font-size:10px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin:14px 0 7px;display:flex;align-items:center;gap:6px; }
+.rcard-body h3::before { content:'';width:3px;height:12px;border-radius:2px;background:var(--a1);display:block; }
+.rcard-body h3:first-child { margin-top:0; }
+.rcard-body strong { color:var(--t1);font-weight:700; }
+.ltag { font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 7px;border-radius:4px;background:rgba(37,99,235,0.08);color:var(--a1);border:1px solid rgba(37,99,235,0.18);font-weight:600;white-space:nowrap; }
+.gtag { font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 7px;border-radius:4px;background:var(--g2);color:var(--g1);border:1px solid var(--g3);font-weight:600; }
+.ntag { font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 7px;border-radius:4px;background:rgba(124,58,237,0.08);color:var(--purple);border:1px solid rgba(124,58,237,0.18);font-weight:600; }
+
+/* Steps */
+.step-list { list-style:none; }
+.step-item { display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border); }
+.step-item:last-child { border:none; }
+.scircle { width:32px;height:32px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;margin-top:1px; }
+.scontent { flex:1; }
+.stitle { font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px; }
+.sdetail { font-size:12px;color:var(--t2);line-height:1.6; }
+.smeta { display:flex;gap:7px;margin-top:6px;flex-wrap:wrap; }
+.sbadge { font-size:10px;padding:2px 9px;border-radius:4px;font-weight:600; }
+.st { background:rgba(217,119,6,0.1);color:var(--gold); }
+.sw { background:var(--a3);color:var(--a1); }
+
+/* Docs */
+.dg-title { font-size:10px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin:14px 0 8px; }
+.dg-title:first-child { margin-top:0; }
+.doc-grid { display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px; }
+.doc-item { display:flex;gap:8px;align-items:flex-start;padding:9px 11px;border-radius:8px;background:var(--bg);border:1.5px solid var(--border);font-size:11px;color:var(--t2);cursor:pointer;line-height:1.45;transition:all 0.18s;user-select:none; }
+.doc-item:hover { border-color:var(--a2);background:var(--a3); }
+.doc-item.chk { background:var(--g2);border-color:var(--g3);color:var(--t1); }
+.dchk { width:16px;height:16px;border-radius:3px;border:1.5px solid var(--t3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.18s;font-size:10px;font-weight:800;color:transparent;margin-top:1px; }
+.doc-item.chk .dchk { background:var(--g1);border-color:var(--g1);color:#fff; }
+
+/* Risk */
+.wb { border-radius:var(--rsm);padding:12px 15px;margin-bottom:10px;font-size:12px;line-height:1.65; }
+.wb-r { background:#fff5f5;border:1.5px solid rgba(220,38,38,0.2);color:var(--red); }
+.wb-y { background:rgba(217,119,6,0.06);border:1.5px solid rgba(217,119,6,0.2);color:var(--gold); }
+.wb-g { background:var(--g2);border:1.5px solid var(--g3);color:var(--g1); }
+.wb-title { font-weight:800;font-size:11px;margin-bottom:5px; }
+.arr { color:var(--a1);margin-right:6px;font-weight:700; }
+
+@keyframes spin { to { transform:rotate(360deg); } }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:rgba(15,31,61,0.12);border-radius:3px; }
+
+@media(max-width:768px) {
+  .sidebar { display:none; }
+  .main { padding:14px; }
+  .fg3,.fg2 { grid-template-columns:1fr; }
+  .doc-grid { grid-template-columns:1fr; }
+  .key-facts { grid-template-columns:1fr; }
+  .nav-pills { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-logo"><span class="br">BR</span><span class="x">✕</span><span class="nk">NK</span></div>
+    <div class="brand-info">
+      <div class="brand-sub">AI Legal Tool – Tra cứu hóa chất</div>
+      <div class="brand-tel">☎ 0906.9013.90</div>
+    </div>
+  </div>
+  <div class="nav-pills">
+    <button class="npill active" onclick="setMode('import',this)">📥 Nhập khẩu</button>
+    <button class="npill" onclick="setMode('export',this)">📤 Xuất khẩu</button>
+    <button class="npill" onclick="setMode('business',this)">🏭 Kinh doanh</button>
+    <button class="npill" onclick="setMode('storage',this)">🏗️ Lưu trữ</button>
+    <button class="npill" onclick="setMode('quick',this)">⚡ Tra nhanh</button>
+  </div>
+  <div class="status-live"><span class="sdot"></span>AI đang hoạt động</div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="slabel">Chế độ tra cứu</div>
+    <button class="sbtn active" onclick="setModeL('import',this)"><span class="ic">📥</span><span><b>Nhập khẩu</b><span class="sub">Import procedures</span></span></button>
+    <button class="sbtn" onclick="setModeL('export',this)"><span class="ic">📤</span><span><b>Xuất khẩu</b><span class="sub">Export controls</span></span></button>
+    <button class="sbtn" onclick="setModeL('business',this)"><span class="ic">🏭</span><span><b>Kinh doanh</b><span class="sub">License & compliance</span></span></button>
+    <button class="sbtn" onclick="setModeL('storage',this)"><span class="ic">🏗️</span><span><b>Lưu trữ / SX</b><span class="sub">Storage rules</span></span></button>
+    <button class="sbtn" onclick="setModeL('quick',this)"><span class="ic">⚡</span><span><b>Tra nhanh</b><span class="sub">Quick lookup</span></span></button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- Quick examples -->
+    <div class="quick-row">
+      <span class="quick-label">Tra nhanh:</span>
+      <button class="qchip" onclick="loadEx('aceton')">⚡ Acetone NK</button>
+      <button class="qchip" onclick="loadEx('h2so4')">⚡ H₂SO₄ 98%</button>
+      <button class="qchip" onclick="loadEx('methanol')">⚡ Methanol (tiền chất)</button>
+      <button class="qchip" onclick="loadEx('lpg')">⚡ LPG lưu trữ</button>
+      <button class="qchip" onclick="loadEx('naoh')">⚡ NaOH xuất khẩu</button>
+      <button class="qchip" onclick="loadEx('orange2t')">⚡ Orange 2T Low Smoke</button>
+    </div>
+
+    <!-- FORM -->
+    <div class="sec-hd">Thông tin hóa chất cần tra cứu</div>
+    <div class="form-card">
+      <div class="form-head">
+        <div class="fh-ic">🧪</div>
+        <div>
+          <div class="fh-title">Nhập thông tin tra cứu</div>
+          <div class="fh-sub">Trường <span style="color:#f87171">*</span> bắt buộc · Upload SDS ở phía dưới để tự động điền</div>
+        </div>
+      </div>
+      <div class="form-body">
+        <div class="fg3">
+          <div class="field">
+            <label>Tên thương mại <span class="req">*</span></label>
+            <input id="tradeName" class="inp" placeholder="VD: Acetone, Sulfuric Acid...">
+          </div>
+          <div class="field">
+            <label>Tên hóa học / IUPAC <span class="req">*</span> <span class="tag-auto">AUTO-FILL</span></label>
+            <input id="chemName" class="inp" placeholder="Tự động từ SDS...">
+          </div>
+          <div class="field">
+            <label>Mã CAS Number <span class="req">*</span> <span class="tag-auto">AUTO-FILL</span></label>
+            <input id="casNumber" class="inp" placeholder="VD: 67-64-1" style="font-family:monospace">
+            <div class="hint">tra tại: pubchem.ncbi.nlm.nih.gov</div>
+          </div>
+        </div>
+        <div class="fg2">
+          <div class="field">
+            <label>HS Code tham khảo <span class="req">*</span> <span class="tag-ai">AI GỢI Ý</span></label>
+            <input id="hsCode" class="inp" placeholder="VD: 2914.11.00" style="font-family:monospace">
+            <div id="hsSuggest" class="hs-ai-suggest" onclick="acceptHs()"></div>
+          </div>
+          <div class="field">
+            <label>Khối lượng dự kiến <span class="tag-opt">nên có</span></label>
+            <input id="quantity" class="inp" placeholder="VD: 1.000 kg/lô">
+          </div>
+        </div>
+        <div class="fg2" style="margin-bottom:14px">
+          <div class="field">
+            <label>Mục đích sử dụng <span class="tag-opt">nên có</span></label>
+            <select id="endUse" class="sel">
+              <option value="">-- Chọn mục đích --</option>
+              <option value="sanxuat">Sản xuất / Gia công</option>
+              <option value="nghiencuu">Nghiên cứu & phát triển</option>
+              <option value="banlai">Kinh doanh / Bán lại</option>
+              <option value="taixuat">Tái xuất khẩu</option>
+              <option value="congnghe">Xử lý / Môi trường</option>
+              <option value="khac">Khác</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Xuất xứ hàng hóa <span class="tag-opt">nên có</span></label>
+            <input id="origin" class="inp" placeholder="VD: China, Korea, Germany...">
+          </div>
+        </div>
+        <div class="fg1" style="margin-bottom:14px">
+          <div class="field">
+            <label>Câu hỏi cụ thể / thông tin thêm <span class="tag-opt">nên có</span></label>
+            <textarea id="extra" class="ta" placeholder="VD: Hóa chất dạng lỏng, dễ cháy. Cần biết có phải xin giấy phép không và bộ hồ sơ cần chuẩn bị..."></textarea>
+          </div>
+        </div>
+        <div class="action-row">
+          <button class="btn-search" id="searchBtn" onclick="doSearch()">🔍 Tra cứu thủ tục & pháp lý</button>
+          <button class="btn-sec" onclick="clearAll()">Nhập lại</button>
+          <span class="miss" id="miss">⚠️ Vui lòng điền đủ các trường bắt buộc (*)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD SDS – ở phía dưới form -->
+    <div class="upload-section">
+      <div class="sec-hd">Upload SDS / MSDS – Tự động điền thông tin</div>
+
+      <div id="uploadZone" class="upload-zone">
+        <input type="file" id="sdsFile" accept=".pdf,.docx,.txt,.csv" onchange="handleUpload(this)">
+        <div class="uz-icon">📄</div>
+        <div class="uz-main">
+          <div class="uz-title">Kéo thả hoặc click để upload file SDS / MSDS</div>
+          <div class="uz-sub">AI sẽ tự đọc và điền: Tên hóa học · Mã CAS · Gợi ý HS Code vào form bên trên</div>
+          <div class="uz-tags">
+            <span class="uz-tag">PDF</span>
+            <span class="uz-tag">DOCX</span>
+            <span class="uz-tag">TXT</span>
+            <span class="uz-tag">AUTO-FILL CAS</span>
+            <span class="uz-tag">AUTO-FILL TÊN HÓA HỌC</span>
+            <span class="uz-tag">GỢI Ý HS CODE</span>
+          </div>
+        </div>
+        <div class="uz-badge">Upload SDS →</div>
+      </div>
+
+      <div id="uploadedBar" class="uploaded-bar" style="margin-top:10px">
+        <span class="ub-icon">✅</span>
+        <div class="ub-info">
+          <div class="ub-name" id="ubName"></div>
+          <div class="ub-size" id="ubSize"></div>
+        </div>
+        <button class="ub-rm" onclick="removeFile()" title="Xóa file">✕</button>
+      </div>
+
+      <div id="analyzingBar" class="analyzing-bar" style="margin-top:10px">
+        <div class="aring"></div>
+        <div class="atext" id="analyzingText">Đang đọc và trích xuất thông tin từ SDS...</div>
+      </div>
+    </div>
+
+    <div style="height:28px"></div>
+
+    <!-- LOADING -->
+    <div class="loading" id="loading">
+      <div class="load-card">
+        <div class="load-ring"></div>
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px" id="loadMsg">Đang phân tích hóa chất...</div>
+        <div style="font-size:11px;color:var(--t3)">Tra cứu văn bản pháp lý 2025–2026</div>
+        <div class="load-steps">
+          <span class="lstep" id="ls0">Phân loại HC</span>
+          <span class="lstep" id="ls1">Tra danh mục tiền chất</span>
+          <span class="lstep" id="ls2">Đối chiếu luật</span>
+          <span class="lstep" id="ls3">Xác định thủ tục</span>
+          <span class="lstep" id="ls4">Tên khai báo HQ</span>
+          <span class="lstep" id="ls5">Tổng hợp kết quả</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="err" id="errBox"></div>
+
+    <!-- RESULT -->
+    <div class="result" id="result">
+      <div class="result-header">
+        <div>
+          <div class="rname" id="resName"></div>
+          <div class="rchemname" id="resChemName"></div>
+          <div class="rtags" id="resTags"></div>
+        </div>
+        <button class="btn-sec" onclick="clearResult()" style="font-size:11px;padding:7px 14px;flex-shrink:0">← Tra cứu mới</button>
+      </div>
+
+      <!-- KEY FACTS -->
+      <div class="key-facts" id="keyFacts">
+        <div class="kf" id="kf-lic">
+          <div class="kf-icon">📋</div>
+          <div><div class="kf-label">Giấy phép đặc biệt</div><div class="kf-val" id="kfv-lic">...</div></div>
+        </div>
+        <div class="kf" id="kf-pre">
+          <div class="kf-icon">⚗️</div>
+          <div><div class="kf-label">Tiền chất kiểm soát</div><div class="kf-val" id="kfv-pre">...</div></div>
+        </div>
+        <div class="kf" id="kf-dec">
+          <div class="kf-icon">🛃</div>
+          <div><div class="kf-label">Khai báo HC tại Hải quan</div><div class="kf-val" id="kfv-dec">...</div></div>
+        </div>
+      </div>
+
+      <!-- DECLARATION BOX -->
+      <div class="decl-box">
+        <div class="decl-label">📝 Tên hàng khai báo hải quan đề xuất</div>
+        <div class="decl-name" id="declName">Đang tải...</div>
+        <div class="decl-note" id="declNote"></div>
+        <span class="decl-copy" onclick="copyDecl(event)">📋 Copy tên khai báo</span>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('overview',this)">📋 Tổng quan</button>
+        <button class="tab" onclick="switchTab('procedure',this)">⚙️ Quy trình</button>
+        <button class="tab" onclick="switchTab('docs',this)">📁 Hồ sơ</button>
+        <button class="tab" onclick="switchTab('risks',this)">⚠️ Rủi ro</button>
+      </div>
+
+      <div class="pane active" id="pane-overview">
+        <div class="rcard"><div class="rcard-head"><span class="rnum">AI</span>Phân tích & Tư vấn pháp lý</div><div class="rcard-body" id="ov-content"></div></div>
+      </div>
+      <div class="pane" id="pane-procedure">
+        <div class="rcard"><div class="rcard-head"><span class="rnum">⚙</span>Quy trình thực hiện từng bước</div><div class="rcard-body" id="pr-content"></div></div>
+      </div>
+      <div class="pane" id="pane-docs">
+        <div class="rcard"><div class="rcard-head"><span class="rnum">📁</span>Danh mục hồ sơ – tick ✓ khi chuẩn bị xong</div><div class="rcard-body" id="dc-content"></div></div>
+      </div>
+      <div class="pane" id="pane-risks">
+        <div class="rcard"><div class="rcard-head"><span class="rnum">⚠</span>Rủi ro & Lỗi phổ biến cần tránh</div><div class="rcard-body" id="rk-content"></div></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+const BACKEND_URL = "https://tra-cuu-hoa-chat.onrender.com";
+
+const EXAMPLES = {
+  aceton:  { tradeName:"Acetone",              chemName:"Propan-2-one",          casNumber:"67-64-1",    hsCode:"2914.11.00", quantity:"5.000 kg/tháng", endUse:"sanxuat", origin:"China",       extra:"Dung môi hữu cơ dễ cháy. Dùng sản xuất sơn. Có cần xin giấy phép không?", mode:"import" },
+  h2so4:   { tradeName:"Sulfuric Acid 98%",    chemName:"Sulfuric acid",          casNumber:"7664-93-9",  hsCode:"2807.00.10", quantity:"20.000 kg/lô",   endUse:"sanxuat", origin:"China",       extra:"Axit đậm đặc 98%, ăn mòn mạnh. Dùng sản xuất phân bón.", mode:"import" },
+  methanol:{ tradeName:"Methanol Industrial",  chemName:"Methanol",               casNumber:"67-56-1",    hsCode:"2905.11.00", quantity:"10.000 lít",     endUse:"sanxuat", origin:"South Korea", extra:"Có phải tiền chất không? Điều kiện nhập khẩu và báo cáo định kỳ?", mode:"import" },
+  lpg:     { tradeName:"LPG",                  chemName:"Propane/Butane mixture", casNumber:"68476-85-7", hsCode:"2711.12.00", quantity:"500 tấn/tháng", endUse:"banlai",  origin:"Singapore",   extra:"Lưu trữ tại kho cảng. Yêu cầu PCCC, kho bãi, kế hoạch ứng phó sự cố?", mode:"storage" },
+  naoh:    { tradeName:"Caustic Soda (NaOH)",  chemName:"Sodium hydroxide",       casNumber:"1310-73-2",  hsCode:"2815.11.00", quantity:"2.000 kg/lô",   endUse:"banlai",  origin:"Vietnam",     extra:"Xuất khẩu sang Myanmar. Yêu cầu nhãn hàng, SDS và kiểm soát xuất khẩu?", mode:"export" },
+  orange2t:{ tradeName:"2T Orange Low Smoke",  chemName:"Low boiling point hydrogen treated naphtha", casNumber:"64742-48-9", hsCode:"2710.12.00", quantity:"1.000 kg/lô", endUse:"sanxuat", origin:"Indonesia", extra:"Dầu bôi trơn 2T dạng lỏng. Cần biết thủ tục nhập khẩu và có phải khai báo hóa chất không?", mode:"import" },
+};
+
+const MODE_TAGS = { import:"📥 Nhập khẩu", export:"📤 Xuất khẩu", business:"🏭 Kinh doanh", storage:"🏗️ Lưu trữ", quick:"⚡ Tra nhanh" };
+let currentMode = "import", hsSugVal = "", loadIv = null;
+
+function setMode(m, btn) {
+  currentMode = m;
+  document.querySelectorAll(".npill").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
+  document.querySelectorAll(".sbtn").forEach((b,i)=>b.classList.toggle("active",["import","export","business","storage","quick"][i]===m));
+}
+function setModeL(m, btn) {
+  currentMode = m;
+  document.querySelectorAll(".sbtn").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
+  document.querySelectorAll(".npill").forEach((b,i)=>b.classList.toggle("active",["import","export","business","storage","quick"][i]===m));
+}
+
+function loadEx(key) {
+  const ex = EXAMPLES[key]; if (!ex) return;
+  ["tradeName","chemName","casNumber","hsCode","quantity","origin","extra"].forEach(id => document.getElementById(id).value = ex[id]||"");
+  document.getElementById("endUse").value = ex.endUse||"";
+  setMode(ex.mode, document.querySelectorAll(".npill")[["import","export","business","storage","quick"].indexOf(ex.mode)]);
+}
+
+// ===== FILE UPLOAD + AUTO-FILL =====
+async function handleUpload(input) {
+  const file = input.files[0]; if (!file) return;
+  document.getElementById("uploadZone").style.display = "none";
+  const bar = document.getElementById("uploadedBar"); bar.style.display = "flex";
+  document.getElementById("ubName").textContent = file.name;
+  document.getElementById("ubSize").textContent = (file.size/1024).toFixed(0)+" KB";
+  document.getElementById("analyzingBar").classList.add("show");
+
+  try {
+    // Try to read as text first
+    let text = "";
+    try {
+      text = await new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file,"UTF-8"); });
+    } catch(e) {
+      text = file.name; // fallback: use filename
+    }
+
+    // If text is too short or binary, use filename as hint
+    const content = text.length > 100 ? text.slice(0, 9000) : `Filename: ${file.name}`;
+    await extractSds(content, file.name);
+  } catch(e) {
+    console.error("Upload error:", e);
+    document.getElementById("analyzingText").textContent = "⚠️ Không đọc được file – vui lòng nhập thủ công";
+  }
+  document.getElementById("analyzingBar").classList.remove("show");
+}
+
+async function extractSds(text, filename) {
+  document.getElementById("analyzingText").textContent = "Đang trích xuất CAS, tên hóa học, HS Code gợi ý...";
+  try {
+    const r = await fetch(`${BACKEND_URL}/api/extract-sds`, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ text, filename })
+    });
+    if (!r.ok) { console.error("SDS API error", r.status); return; }
+    const { info } = await r.json();
+    if (!info) return;
+
+    console.log("SDS info extracted:", info);
+
+    // Auto-fill with highlight animation
+    const fills = [["tradeName",info.tradeName],["chemName",info.chemName],["casNumber",info.casNumber]];
+    let filled = 0;
+    fills.forEach(([id,val]) => {
+      if (val && val.trim()) {
+        const el = document.getElementById(id);
+        el.value = val.trim();
+        el.classList.add("filled");
+        setTimeout(()=>el.classList.remove("filled"), 3000);
+        filled++;
+      }
+    });
+
+    if (info.hsSuggestion && info.hsSuggestion.trim()) {
+      hsSugVal = info.hsSuggestion.trim();
+      const s = document.getElementById("hsSuggest");
+      s.textContent = `💡 AI gợi ý HS Code: ${hsSugVal}${info.hsDescription?" – "+info.hsDescription:""} → Click để chọn`;
+      s.classList.add("show");
+    }
+
+    if (filled > 0) {
+      document.getElementById("analyzingText").textContent = `✅ Đã tự động điền ${filled} trường từ SDS`;
+    } else {
+      document.getElementById("analyzingText").textContent = "⚠️ Không tìm được thông tin – vui lòng nhập thủ công";
+    }
+  } catch(e) {
+    console.error("Extract SDS error:", e);
+    document.getElementById("analyzingText").textContent = "⚠️ Lỗi xử lý SDS – vui lòng nhập thủ công";
+  }
+}
+
+function acceptHs() { document.getElementById("hsCode").value=hsSugVal; document.getElementById("hsSuggest").classList.remove("show"); }
+function removeFile() {
+  document.getElementById("uploadZone").style.display="flex";
+  document.getElementById("uploadedBar").style.display="none";
+  document.getElementById("analyzingBar").classList.remove("show");
+  document.getElementById("sdsFile").value="";
+  document.getElementById("hsSuggest").classList.remove("show");
+}
+
+function v(id) { return document.getElementById(id).value.trim(); }
+function clearAll() {
+  ["tradeName","chemName","casNumber","hsCode","quantity","origin","extra"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("endUse").value=""; removeFile(); clearResult();
+}
+function clearResult() {
+  document.getElementById("result").style.display="none";
+  document.getElementById("result").classList.remove("show");
+  document.getElementById("errBox").classList.remove("show");
+  document.getElementById("loading").classList.remove("show");
+}
+function switchTab(tab, btn) {
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".pane").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("active"); document.getElementById("pane-"+tab).classList.add("active");
+}
+function startLoadSteps() {
+  const ids=["ls0","ls1","ls2","ls3","ls4","ls5"]; let i=0;
+  ids.forEach(id=>document.getElementById(id).classList.remove("on"));
+  loadIv=setInterval(()=>{ if(i<ids.length)document.getElementById(ids[i++]).classList.add("on"); else clearInterval(loadIv); },700);
+}
+
+async function doSearch() {
+  if (!["tradeName","chemName","casNumber","hsCode"].every(id=>v(id))) {
+    const m=document.getElementById("miss"); m.style.display="inline"; setTimeout(()=>m.style.display="none",3000); return;
+  }
+  clearResult();
+  document.getElementById("loading").classList.add("show");
+  document.getElementById("searchBtn").disabled=true;
+  startLoadSteps();
+  const body={tradeName:v("tradeName"),chemName:v("chemName"),casNumber:v("casNumber"),hsCode:v("hsCode"),quantity:v("quantity"),endUse:document.getElementById("endUse").value,origin:v("origin"),extra:v("extra"),mode:currentMode};
+  try {
+    const r=await fetch(`${BACKEND_URL}/api/lookup`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||`HTTP ${r.status}`);}
+    const data=await r.json();
+    clearInterval(loadIv); document.getElementById("loading").classList.remove("show");
+    renderResult(data.result,body);
+  } catch(e) {
+    clearInterval(loadIv); document.getElementById("loading").classList.remove("show");
+    const eb=document.getElementById("errBox"); eb.textContent="⚠️ "+(e.message||"Lỗi kết nối backend"); eb.classList.add("show");
+  } finally { document.getElementById("searchBtn").disabled=false; }
+}
+
+function extractSection(text,key){const s=text.indexOf(`===${key}===`);if(s===-1)return text;const e=text.indexOf("===",s+key.length+6);return text.slice(s+key.length+6,e!==-1?e:undefined).trim();}
+
+function md(t){
+  return t.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+    .replace(/(Điều\s+\d+[^\s,;.]*)/g,'<span class="ltag">$1</span>')
+    .replace(/(Khoản\s+\d+[^\s,;.]*)/g,'<span class="ltag">$1</span>')
+    .replace(/(NĐ\s+\d+\/\d+[^\s,;.]*)/g,'<span class="ltag">$1</span>')
+    .replace(/(TT\s+\d+\/\d+[^\s,;.]*)/g,'<span class="ntag">$1</span>')
+    .replace(/(Luật\s+\d+\/\d+[^\s,;.]*)/g,'<span class="gtag">$1</span>');
+}
+
+function renderRich(el,text){el.innerHTML=text.split("\n").map(line=>{const t=line.trim();if(!t)return'<div style="height:5px"></div>';if(t.startsWith("# "))return`<h3>${t.slice(2)}</h3>`;if(t.startsWith("- "))return`<p><span class="arr">→</span>${md(t.slice(2))}</p>`;return`<p>${md(t)}</p>`;}).join("");}
+
+function renderSteps(el,text){
+  const rx=/STEP\s*(\d+):\s*([^\n]+)([\s\S]*?)(?=STEP\s*\d+:|$)/gi;let steps=[],m;
+  while((m=rx.exec(text))!==null){const d=m[3].trim();const time=(d.match(/Thời gian[:\s]+([^\n→]+)/i)||[])[1]?.trim();const where=(d.match(/Nơi thực hiện[:\s]+([^\n→]+)/i)||[])[1]?.trim();const body=d.replace(/→ Nơi thực hiện.*$/m,"").replace(/→ Thời gian.*$/m,"").replace(/→ Chi tiết[:\s]*/m,"").trim();steps.push({num:m[1],title:m[2].trim(),body,time,where});}
+  if(!steps.length){renderRich(el,text);return;}
+  el.innerHTML='<ul class="step-list">'+steps.map(s=>`<li class="step-item"><div class="scircle">${s.num}</div><div class="scontent"><div class="stitle">${md(s.title)}</div><div class="sdetail">${md(s.body.replace(/\n/g," "))}</div><div class="smeta">${s.time?`<span class="sbadge st">⏱ ${s.time}</span>`:""}${s.where?`<span class="sbadge sw">📍 ${s.where}</span>`:""}</div></div></li>`).join("")+"</ul>";
+}
+
+function renderDocs(el,text){
+  const lines=text.split("\n");let groups=[],cur=null;
+  lines.forEach(l=>{const t=l.trim();if(!t)return;if(t.startsWith("NHÓM")||t.match(/^[A-Z]+ - /)){cur={title:t.replace(/^NHÓM\s+[A-Z]\s*-\s*/,"").replace(/:$/,""),items:[]};groups.push(cur);}else if(t.startsWith("- ")&&cur)cur.items.push(t.slice(2));else if(!cur&&t.startsWith("- ")){if(!groups.length)groups.push({title:"Hồ sơ",items:[]});groups[groups.length-1].items.push(t.slice(2));}});
+  if(!groups.length||groups.every(g=>!g.items.length)){renderRich(el,text);return;}
+  let html="";groups.forEach(g=>{html+=`<div class="dg-title">📂 ${g.title}</div><div class="doc-grid">`;g.items.forEach(item=>{html+=`<div class="doc-item" onclick="this.classList.toggle('chk');this.querySelector('.dchk').textContent=this.classList.contains('chk')?'✓':''"><div class="dchk"></div><span>${md(item)}</span></div>`;});html+="</div>";});
+  el.innerHTML=html;
+}
+
+function renderRisks(el,text){
+  let html="";text.split("\n").forEach(line=>{const t=line.trim();if(!t)return;if(/xử phạt|phạt tiền|vi phạm|bị phạt/i.test(t))html+=`<div class="wb wb-r"><div class="wb-title">🚨 Rủi ro pháp lý</div>${md(t)}</div>`;else if(/khuyến nghị|lưu ý|nên |đề xuất/i.test(t))html+=`<div class="wb wb-y"><div class="wb-title">⚡ Khuyến nghị</div>${md(t)}</div>`;else if(t.startsWith("- "))html+=`<p style="padding-left:10px;border-left:2px solid var(--a4);margin-bottom:8px;font-size:13px;color:var(--t2)"><span class="arr">→</span>${md(t.slice(2))}</p>`;else html+=`<p style="margin-bottom:8px;font-size:13px;color:var(--t2)">${md(t)}</p>`;});
+  el.innerHTML=html;
+}
+
+function copyDecl(e){const txt=document.getElementById("declName").textContent;navigator.clipboard.writeText(txt).then(()=>{const btn=e.target;btn.textContent="✅ Đã copy!";setTimeout(()=>btn.textContent="📋 Copy tên khai báo",2000);});}
+
+function renderResult(text,body){
+  document.getElementById("resName").textContent=body.tradeName+" (CAS: "+body.casNumber+")";
+  document.getElementById("resChemName").textContent=body.chemName+" · HS Code: "+body.hsCode;
+  const ovText=extractSection(text,"OVERVIEW");
+  const fnText=extractSection(text,"FULLNAME");
+
+  document.getElementById("resTags").innerHTML=[
+    `<span class="rtag rt-navy">${MODE_TAGS[body.mode]||body.mode}</span>`,
+    `<span class="rtag rt-blue rt-mono">${body.hsCode}</span>`,
+    `<span class="rtag rt-gold rt-mono">CAS: ${body.casNumber}</span>`,
+  ].join("");
+
+  // Key facts
+  const hasLic=/cần giấy phép|phải xin giấy|giấy phép nhập khẩu|hóa chất hạn chế/i.test(ovText);
+  const noLic=/không cần giấy phép|tự do thương mại|không phải xin|không cần xin/i.test(ovText);
+  const hasPre=/tiền chất|nhóm 4|kiểm soát đặc biệt/i.test(ovText);
+  const hasDec=/khai báo hóa chất|phải khai báo|khai báo tại hải quan|khai báo hải quan/i.test(ovText);
+
+  function setKf(id,valId,cls,val){
+    const el=document.getElementById(id); el.className="kf "+cls;
+    document.getElementById(valId).textContent=val;
+  }
+
+  if(hasLic&&!noLic) setKf("kf-lic","kfv-lic","kf-yes","✅ Phải xin GP");
+  else if(noLic) setKf("kf-lic","kfv-lic","kf-no","❌ Không cần");
+  else setKf("kf-lic","kfv-lic","kf-warn","⚠️ Cần xác nhận");
+
+  setKf("kf-pre","kfv-pre",hasPre?"kf-yes":"kf-no",hasPre?"✅ Là tiền chất":"❌ Không phải");
+  setKf("kf-dec","kfv-dec",hasDec?"kf-yes":"kf-no",hasDec?"✅ Phải khai báo":"❌ Không bắt buộc");
+
+  // Declaration name
+  if(fnText&&fnText!==text){
+    const lines=fnText.split("\n").filter(l=>l.trim());
+    document.getElementById("declName").textContent=lines[0]||"";
+    document.getElementById("declNote").textContent=lines.slice(1).join(" ").trim();
+  } else {
+    document.getElementById("declName").textContent=`${body.chemName} (${body.tradeName}), CAS: ${body.casNumber}, HS: ${body.hsCode}${body.origin?", xuất xứ "+body.origin:""}`;
+    document.getElementById("declNote").textContent="Tên hàng tham chiếu theo quy định khai báo hải quan – cần xác nhận với cơ quan kiểm tra chuyên ngành trước khi khai chính thức.";
+  }
+
+  renderRich(document.getElementById("ov-content"),ovText);
+  renderSteps(document.getElementById("pr-content"),extractSection(text,"PROCEDURE"));
+  renderDocs(document.getElementById("dc-content"),extractSection(text,"DOCS"));
+  renderRisks(document.getElementById("rk-content"),extractSection(text,"RISKS"));
+
+  const r=document.getElementById("result"); r.style.display="block"; r.classList.add("show");
+  document.querySelectorAll(".tab").forEach((b,i)=>b.classList.toggle("active",i===0));
+  document.querySelectorAll(".pane").forEach((p,i)=>p.classList.toggle("active",i===0));
+  setTimeout(()=>r.scrollIntoView({behavior:"smooth",block:"start"}),100);
+}
+
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.ctrlKey)doSearch();});
+</script>
+</body>
+</html>
